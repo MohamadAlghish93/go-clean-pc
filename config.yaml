@@ -1,0 +1,6 @@
+cleanup_paths:
+  - "/Users/chadooo/Library/Caches"
+  - "/Users/chadooo/Library/Logs"
+max_file_size: 104857600  # 100MB in bytes
+top_files: 5
+log_file: "cleaner.log"
