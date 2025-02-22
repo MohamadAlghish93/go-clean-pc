@@ -3,16 +3,16 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/mem"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"sort"
 	"strings"
-  "sync"
+	"sync"
 	"time"
-  "sort"
-	"github.com/shirou/gopsutil/cpu"
-	"github.com/shirou/gopsutil/mem"
 )
 
 // Define directories to clean
@@ -129,12 +129,11 @@ func systemMonitor() {
 	}
 }
 
-
 // Disk usage scanner - Finds large files in a given directory
 func scanLargeFiles(directory string, topN int) {
 	fmt.Println("\n🔎 Scanning for large files in:", directory)
 
-  var wg sync.WaitGroup
+	var wg sync.WaitGroup
 	wg.Add(1)
 	stop := startLoading("Analyzing files...", &wg)
 
@@ -153,10 +152,9 @@ func scanLargeFiles(directory string, topN int) {
 		return nil
 	})
 
-
-  stop <- true
+	stop <- true
 	wg.Wait()
-  
+
 	if err != nil {
 		fmt.Println("⚠️  Error scanning directory:", err)
 		return
@@ -192,8 +190,8 @@ func main() {
 	fmt.Println("🚀 CleanMyMac Go - Minimal Terminal Version 🚀")
 	fmt.Println("===========================================")
 
+	fmt.Printf("")
 
- 
 	showJunkUsage()
 
 	// Prompt user before deleting
@@ -203,7 +201,7 @@ func main() {
 		fmt.Println("❌ Cleanup canceled.")
 	}
 
-  // Scan for large files
+	// Scan for large files
 	if promptUser("Do you want to scan for large files?") {
 		fmt.Print("📂 Enter directory to scan: ")
 		reader := bufio.NewReader(os.Stdin)
@@ -213,13 +211,12 @@ func main() {
 		scanLargeFiles(dir, 5) // Show top 5 largest files
 	}
 
- // Show system monitoring first
+	// Show system monitoring first
 	go systemMonitor()
 
-  // Optimize memory
+	// Optimize memory
 	optimizeMemory()
 
 	fmt.Println("\n⏳ Exiting in 3 seconds...")
 	time.Sleep(3 * time.Second)
 }
-
